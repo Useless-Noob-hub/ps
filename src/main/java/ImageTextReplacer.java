@@ -1,9 +1,11 @@
 
+import lombok.extern.slf4j.Slf4j;
 import service.PhoneImageGenerate;
 
 import java.io.IOException;
 
 
+//启动类
 public class ImageTextReplacer {
 
     private static final PhoneImageGenerate pig= new PhoneImageGenerate();

@@ -7,13 +7,16 @@ import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import static constant.Constants.*;
 
@@ -27,21 +30,31 @@ public class PhoneImageGenerate {
         Random random = new Random();
         ArrayList<CallLog> dataList = new ArrayList<>();
 
-        // 读取模板图片
-        BufferedImage template = ImageIO.read(new File(TEMPLATE_PATH)); // 直接使用 TEMPLATE_PATH
 
-        // 读取手机号
-        String[] phones = new String(Files.readAllBytes(new File(PHONE_FILE_PATH).toPath())).split("\n"); // 直接使用 PHONE_FILE_PATH
+        // 读取模板图片
+        BufferedImage template = ImageIO.read(this.getClass().getClassLoader().getResourceAsStream(TEMPLATE_PATH)); // 直接使用 TEMPLATE_PATH
+
+
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream(PHONE_FILE_PATH);
+
+        List<String> phones = new BufferedReader(new InputStreamReader(is))
+                .lines()
+                .filter(line -> !line.trim().isEmpty())
+                .toList();
+
+
+
         LocalTime startTime = START_TIME; // 直接使用 START_TIME
 
         //声明数据
         int interval, duration;
         // 生成数据
-        for (int i = 0; i < phones.length; i++) {
+        for (String phone : phones) {
             interval = random.nextInt(MAX_INTERVAL - MIN_INTERVAL + 1) + MIN_INTERVAL; // 使用 MIN_INTERVAL 和 MAX_INTERVAL
             startTime = startTime.plusSeconds(interval);
             duration = random.nextInt(40) + 20;// 持续时间
-            dataList.add(new CallLog(phones[i], startTime, duration));
+            dataList.add(new CallLog(phone, startTime, duration));
         }
 
         // 生成图片
@@ -68,6 +81,9 @@ public class PhoneImageGenerate {
             } catch (IOException e) {
                 System.err.println("图片生成失败: " + e.getMessage());
             }
+            //关闭资源
+
+
         }
     }
 

@@ -4,9 +4,9 @@ import java.time.LocalTime;
 
 public class Constants {
     // 模板图片路径
-    public static final String TEMPLATE_PATH = System.getProperty("user.dir") +"/src/main/resources/template.png";
+    public static final String TEMPLATE_PATH = "template/手机拨号模板.png";
     // 手机号文件路径
-    public static final String PHONE_FILE_PATH =System.getProperty("user.dir") + "/src/main/resources/phone.txt";
+    public static final String PHONE_FILE_PATH = "data/phone.txt";
     // 输出目录
     public static final String OUTPUT_DIR = "output";
 
